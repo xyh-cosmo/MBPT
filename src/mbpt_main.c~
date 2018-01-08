@@ -1,0 +1,51 @@
+#include"../include/mbpt.h"
+
+/*  global vaiable : Initial Conditions (z = 1020)  */
+double      lnk[ic_size];
+double      deltac[ic_size];
+double      deltab[ic_size];
+double      thetac[ic_size];
+double      thetab[ic_size];
+
+void write_transfer_function(   double kmin, double kmax, int nk, 
+                                double mu, double vbc, char fname[]);
+
+void write_transfer_function_mu_vbc(double kmin, double kmax, int nk, char fname[]);
+
+
+int main(void)
+{
+    /*  Setup initial conditions    */
+    /*  Initial conditions is obtained from cmbfast, using adiabatic intial conditions  */
+//    setup_ode_initial(  "./ic_data/adiabatic.dat", lnk, deltac, deltab, thetac, thetab );
+    setup_ode_initial(  "./ic_data/xyh.dat", lnk, deltac, deltab, thetac, thetab );
+    
+
+/*===============================================================================*/
+/*  TEST PART   */
+/*
+    double kmin = exp(lnk[0]);
+    double kmax = exp(lnk[ic_size - 1]);
+    write_transfer_function_mu_vbc(kmin, kmax, 1000, "test_a_1020.dat");
+*/    
+
+    int i;
+    int nk      = 100;
+    double kmin = 1.0;
+    double kmax = 2500.0;
+    double k, dlnk;
+
+    dlnk    = (log(kmax) - log(kmin))/(nk - 1);
+
+    FILE *fp = fopen("power_xx_500.dat","w");
+    
+    for(i=0; i<nk; i++)
+    {
+        k   = exp(log(kmin) + i*dlnk);
+        printf("%15.7E\t%15.7E\n",k, P_zeta2*power_k_averaged_over_mu_vbc(k, 100));
+        fprintf(fp, "%15.7E\t%15.7E\n",k, P_zeta2*power_k_averaged_over_mu_vbc(k, 100));
+    }
+    fclose(fp);
+
+    return 0;
+}

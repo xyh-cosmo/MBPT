@@ -1,0 +1,21 @@
+=====================================   Useage  ===================================
+    complie & link the gsl libs
+        $ make
+    run the code
+        $ make run
+    clear the complied obj-files
+        $ make clean
+============================ Initial Condition (z=1020)  ==========================
+    Initial condition is obtained from cmbfast, using adiabatic intial condtions for 
+    the moment.
+
+    In the code MBPT, intial conditions is stored in :
+        deltac[],
+        deltab[],
+        thetac[],
+        thetab[].
+    [[[ BE CAREFUL !!! ]]]
+    the size of the arrays and kmin & kmax should be modified when the corresponding 
+    input of cmbfast is changed.!!!
+
+    
